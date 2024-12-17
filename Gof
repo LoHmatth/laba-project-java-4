@@ -1,0 +1,162 @@
+ 1. Singleton
+
+Паттерн Singleton гарантирует, что у класса есть только один экземпляр и предоставляет к нему глобальную точку доступа.
+
+```java
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+
+    public void showMessage() {
+        System.out.println("Hello from Singleton!");
+    }
+}
+```
+
+ 2. Factory Method
+
+Паттерн Factory Method определяет интерфейс для создания объектов, но позволяет подклассам изменять тип создаваемых объектов.
+
+```java
+// Продукт
+interface Product {
+    void use();
+}
+
+// Конкретные продукты
+class ConcreteProductA implements Product {
+    public void use() {
+        System.out.println("Using ConcreteProductA");
+    }
+}
+
+class ConcreteProductB implements Product {
+    public void use() {
+        System.out.println("Using ConcreteProductB");
+    }
+}
+
+// Создатель
+abstract class Creator {
+    public abstract Product factoryMethod();
+}
+
+// Конкретные создатели
+class CreatorA extends Creator {
+    public Product factoryMethod() {
+        return new ConcreteProductA();
+    }
+}
+
+class CreatorB extends Creator {
+    public Product factoryMethod() {
+        return new ConcreteProductB();
+    }
+}
+```
+
+ 3. Observer
+
+Паттерн Observer определяет зависимость "один ко многим" между объектами, так что при изменении состояния одного объекта все зависимые от него объекты уведомляются и обновляются автоматически.
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+// Субъект
+class Subject {
+    private List<Observer> observers = new ArrayList<>();
+    private int state;
+
+    public void attach(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void setState(int state) {
+        this.state = state;
+        notifyAllObservers();
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    private void notifyAllObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
+    }
+}
+
+// Наблюдатель
+abstract class Observer {
+    protected Subject subject;
+    public abstract void update();
+}
+
+// Конкретные наблюдатели
+class ConcreteObserverA extends Observer {
+    public ConcreteObserverA(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void update() {
+        System.out.println("ConcreteObserverA: " + subject.getState());
+    }
+}
+
+class ConcreteObserverB extends Observer {
+    public ConcreteObserverB(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void update() {
+        System.out.println("ConcreteObserverB: " + subject.getState());
+    }
+}
+```
+
+ 4. Strategy
+
+Паттерн Strategy определяет семейство алгоритмов, инкапсулирует каждый из них и делает их взаимозаменяемыми.
+
+```java
+// Алгоритм
+interface Strategy {
+    void execute();
+}
+
+// Конкретные стратегии
+class ConcreteStrategyA implements Strategy {
+    public void execute() {
+        System.out.println("Executing Strategy A");
+    }
+}
+
+class ConcreteStrategyB implements Strategy {
+    public void execute() {
+        System.out.println("Executing Strategy B");
+    }
+}
+
+// Контекст
+class Context {
+    private Strategy strategy;
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void executeStrategy() {
+        strategy.execute();
+    }
+}
+```
